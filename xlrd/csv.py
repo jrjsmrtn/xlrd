@@ -2,6 +2,7 @@
 
 # Copyright (c) 2013 Georges Martin under a BSD licence
 
+from __future__ import absolute_import
 import csv
 from .sheet import Sheet
 
