@@ -27,11 +27,12 @@ class SheetReader(object):
         return self
 
     def next(self):
+        ln = self.line_num
         self.line_num += 1
-        if self.line_num >= self._nrows:
+        if self.line_num > self._nrows:
             raise StopIteration
         else:
-            return self.sheet.row_values(self.line_num)
+            return self.sheet.row_values(ln)
 
 
 class SheetDictReader(csv.DictReader):
