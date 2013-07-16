@@ -3,7 +3,7 @@
 # Copyright (c) 2013 Georges Martin under a BSD licence
 
 import csv
-from . import sheet
+from .sheet import Sheet
 
 __all__ = (
     'SheetReader',
@@ -12,18 +12,19 @@ __all__ = (
 
 
 class SheetReader(object):
-    """A csv.reader-compatible reader for xlrd.sheet."""
+    """A csv.reader-compatible reader for xlrd.sheet.Sheet."""
 
     def __init__(self, sheet, *args, **kw):
-        if not isinstance(sheet, xlrd.sheet.Sheet):
-            raise TypeError()
+        if not isinstance(sheet, Sheet):
+            raise TypeError("sheet argument must be of type xlrd.sheet.Sheet, "
+                            "got a " + type(sheet) + " instead")
         self.sheet = sheet
         self._nrows = sheet.nrows
         self.line_num = 0
-    
+
     def __iter__(self):
         return self
-    
+
     def next(self):
         self.line_num += 1
         if self.line_num >= self._nrows:
@@ -33,11 +34,14 @@ class SheetReader(object):
 
 
 class SheetDictReader(csv.DictReader):
-    """A csv.DictReader-compatible DictReader for xlrd.sheet."""
+    """A csv.DictReader-compatible reader for xlrd.sheet.Sheet."""
 
-    def __init__(self, sheet, fieldnames=None, restkey=None, restval=None, *args, **kw):
-        if not isinstance(sheet, xlrd.sheet.Sheet):
-            raise TypeError()
+    def __init__(self, sheet, fieldnames=None,
+                 restkey=None, restval=None,
+                 *args, **kw):
+        if not isinstance(sheet, Sheet):
+            raise TypeError("sheet argument must be of type xlrd.sheet.Sheet, "
+                            "got a " + type(sheet) + " instead")
         self.sheet = sheet
         self.reader = SheetReader(sheet, *args, **kw)
         self._fieldnames = fieldnames
